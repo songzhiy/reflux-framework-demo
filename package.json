@@ -1,0 +1,17 @@
+{
+  "name": "hotrntest",
+  "version": "1.0.0",
+  "description": "test hot rn",
+  "main": "index.android.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node node_modules/react-native/local-cli/cli.js start"
+  },
+  "author": "szy",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^16.0.0-alpha.6",
+    "react-native": "^0.43.0",
+    "react-native-code-push": "^2.0.2-beta"
+  }
+}
