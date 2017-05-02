@@ -47,15 +47,11 @@ export default class ChooseListView extends Component {
         this.props.jumpPage(rowData);
     }
 
-    _onPressItem(rowData) {
-        this._chooseOrJump(rowData);
-    }
-
     _getRenderRow(rowData) {
         return (
             <View>
                 <Text style={[StyleContainer.centerTextStyle, StyleContainer.font14]}
-                      onPress={() => this._onPressItem(rowData)}>{rowData.name}</Text>
+                      onPress={() => this._chooseOrJump(rowData)}>{rowData.name}</Text>
             </View>
         );
     }
@@ -65,7 +61,7 @@ export default class ChooseListView extends Component {
             <View>
                 <Text style={[StyleContainer.centerTextStyle, StyleContainer.font20]}>{this.props.title}</Text>
                 <ListView enableEmptySections={true} renderRow={(rowData) => this._getRenderRow(rowData)}
-                          dataSource={this.state.dataSource} />
+                          dataSource={this.state.dataSource}/>
             </View>
         )
     }
@@ -75,8 +71,8 @@ ChooseListView.propTypes = {
     ...View.propTypes,
     title: PropTypes.string,
     data: PropTypes.array,
-    jumpPage:PropTypes.func,
-    fetchData:PropTypes.func,
+    jumpPage: PropTypes.func,
+    fetchData: PropTypes.func,
 };
 
 ChooseListView.defaultProps = {
