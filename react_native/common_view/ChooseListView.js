@@ -1,12 +1,9 @@
 /**
  * Created by songzhiyang on 2017/4/25.
  */
-import React, {Component, PropTypes} from 'react';
-import {
-    ListView, View, Text,
-} from 'react-native';
+import React, {Component, PropTypes} from "react";
+import {ListView, Text, View} from "react-native";
 import {styles as StyleContainer} from "../styles/StyleContainer";
-import ListDataStore from "../store/ListDataStore";
 
 export default class ChooseListView extends Component {
     ds = new ListView.DataSource({
@@ -19,17 +16,11 @@ export default class ChooseListView extends Component {
             dataSource: this.ds.cloneWithRows(this.props.data),
         }
         this._chooseOrJump = this._chooseOrJump.bind(this);
-        this._loadData = this._loadData.bind(this);
         this.updateData = this.updateData.bind(this);
     }
 
     componentDidMount() {
-        console.log('inner componentDidMount');
-        this._loadData();
-    }
-
-    componentWillUnmount() {
-        console.log('inner componentWillUnmount');
+        this.props.fetchData();
     }
 
     updateData(data) {
@@ -37,10 +28,6 @@ export default class ChooseListView extends Component {
                 dataSource: this.ds.cloneWithRows(data),
             }
         );
-    }
-
-    async _loadData() {
-        let response = await this.props.fetchData();
     }
 
     _chooseOrJump(rowData) {

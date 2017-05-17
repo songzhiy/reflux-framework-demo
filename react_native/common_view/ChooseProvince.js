@@ -2,14 +2,10 @@
  * Created by songzhiyang on 2017/4/25.
  */
 
-import React,{Component,PropTypes} from 'react';
-import {
-    View,
-} from 'react-native';
+import React, {Component} from "react";
 import ChooseCity from "./ChooseCity";
 import ChooseListView from "./ChooseListView";
-import ListViewAction from "../action/ListViewAction";
-import ListDataStore from "../store/ListDataStore";
+import LoadDataStore from "../store/LoadDataStore";
 
 export default class ChooseProvince extends Component {
 
@@ -20,23 +16,20 @@ export default class ChooseProvince extends Component {
         this._onDataChange = this._onDataChange.bind(this);
     }
 
-    componentDidMount() {
-        console.log('outer componentDidMount');
+    componentWillMount() {
+        LoadDataStore.registUpdateViewCallBack(this._onDataChange);
     }
 
     componentWillUnmount() {
-        console.log('outer componentWillUnmount');
-        ListDataStore.getListDataStore().removeOnProvinceChangeListener(this._onDataChange);
+        LoadDataStore.unregistUpdateViewCallBack(this._onDataChange);
     }
 
-    _onDataChange() {
-        let data = ListDataStore.getListDataStore().getAll();
-        this.refs.listView.updateData(data);
+    _onDataChange(data) {
+        this.refs.listView.updateData(data.provinceData);
     }
 
     fetchData() {
-        ListDataStore.getListDataStore().addOnProvinceChangeListener(this._onDataChange);
-        ListViewAction.action_load_data_province(this.props.rowData);
+        LoadDataStore.loadDataAction.loadProvince(this.props.rowData);
     }
 
     jump2City(rowData) {

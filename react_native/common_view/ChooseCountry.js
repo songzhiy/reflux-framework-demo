@@ -2,18 +2,13 @@
  * Created by songzhiyang on 2017/4/25.
  */
 
-import React,{Component} from 'react';
-import {
-    ToastAndroid
-} from 'react-native';
+import React, {Component} from "react";
+import {ToastAndroid} from "react-native";
 import AsyncStoreUtils from "../utils/AsyncStoreUtils";
 import Constants from "../utils/Constants";
 import StartNewPage from "../rn_native/StartNewPage.android";
-import ServerFetchUtils from "../model/api/ServerFetchUtils";
-import ServerApi from "../model/api/ServerApi";
 import ChooseListView from "./ChooseListView";
-import ListViewAction from "../action/ListViewAction";
-import ListDataStore from "../store/ListDataStore";
+import LoadDataStore from "../store/LoadDataStore";
 
 export default class ChooseCountry extends Component {
 
@@ -32,18 +27,20 @@ export default class ChooseCountry extends Component {
         StartNewPage.startNewPage('szy.com.hotrntest.WeatherDetailActivity');
     }
 
+    componentWillMount() {
+        LoadDataStore.registUpdateViewCallBack(this._onDataChange);
+    }
+
     componentWillUnmount() {
-        ListDataStore.getListDataStore().removeOnCountryChangeListener(this._onDataChange);
+        LoadDataStore.unregistUpdateViewCallBack(this._onDataChange);
     }
 
-    async fetchData() {
-        ListDataStore.getListDataStore().addOnCountryChangeListener(this._onDataChange);
-        let response = ListViewAction.action_load_data_countries(this.props.rowData);
+    fetchData() {
+        LoadDataStore.loadDataAction.loadCountry(this.props.rowData);
     }
 
-    _onDataChange() {
-        let data = ListDataStore.getListDataStore().getAll();
-        this.refs.listView.updateData(data);
+    _onDataChange(data) {
+        this.refs.listView.updateData(data.countryData);
     }
 
     render() {

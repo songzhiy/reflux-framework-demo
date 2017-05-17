@@ -2,13 +2,10 @@
  * Created by songzhiyang on 2017/4/25.
  */
 
-import React,{Component} from 'react';
+import React, {Component} from "react";
 import ChooseCountry from "./ChooseCountry";
-import ServerFetchUtils from "../model/api/ServerFetchUtils";
-import ServerApi from "../model/api/ServerApi";
 import ChooseListView from "./ChooseListView";
-import ListViewAction from "../action/ListViewAction";
-import ListDataStore from "../store/ListDataStore";
+import LoadDataStore from "../store/LoadDataStore";
 
 export default class ChooseCity extends Component {
 
@@ -29,17 +26,19 @@ export default class ChooseCity extends Component {
     }
 
     componentWillUnmount() {
-        ListDataStore.getListDataStore().removeOnCityChangeListener(this._onDataChange);
+        LoadDataStore.unregistUpdateViewCallBack(this._onDataChange);
     }
 
-    _onDataChange() {
-        let data = ListDataStore.getListDataStore().getAll();
-        this.refs.listView.updateData(data);
+    componentWillMount() {
+        LoadDataStore.registUpdateViewCallBack(this._onDataChange);
     }
 
-    async fetchData() {
-        ListDataStore.getListDataStore().addOnCityChangeListener(this._onDataChange);
-        let repsonse = await ListViewAction.action_load_data_cities(this.props.rowData);
+    _onDataChange(data) {
+        this.refs.listView.updateData(data.cityData);
+    }
+
+    fetchData() {
+        LoadDataStore.loadDataAction.loadCity(this.props.rowData);
     }
 
     render() {
