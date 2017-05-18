@@ -9,61 +9,44 @@ import AsyncAction from "../framework/action/AsyncAction";
 class LoadDataStore extends BaseStore {
 
     loadDataAction = this.createActions([{
-        loadProvince:
-            Object.assign(new AsyncAction(),{
-                preEmit:function(rowData) {
-                    LoadDataUsecase.loadProvinceData(rowData).then(this.completed).catch(this.failed);
-                },
-                shouldEmit: function (data) {
-                    if (data === undefined || data === null) {
-                        return false;
-                    }
-                    return true;
-                },
-            })
-            // {
-            // sync: false,
-            // children:['complete','failed'],
-            // preEmit: function (rowData) {
-            //     LoadDataUsecase.loadProvinceData(rowData).then(this.complete).catch(this.failed);
-            // },
-            // shouldEmit: function (data) {
-            //     if (data === undefined || data === null) {
-            //         return false;
-            //     }
-            //     return true;
-            // },
-            // }
+        loadProvince: Object.assign(new AsyncAction(), {
+            preEmit: function (rowData) {
+                LoadDataUsecase.loadProvinceData(rowData).then(this.completed).catch(this.failed);
+            },
+            //目前这个没有用
+            shouldEmit: function (data) {
+                if (data === undefined || data === null) {
+                    return false;
+                }
+                return true;
+            },
+        })
     }, {
-        loadCity: {
-            sync:false,
-            asyncResult:true,
-            preEmit:function (rowData) {
+        loadCity: Object.assign(new AsyncAction(), {
+            preEmit: function (rowData) {
                 LoadDataUsecase.loadCitiesData(rowData).then(this.completed).catch(this.failed);
-            },
-        }
-    },{
-        loadCountry:{
-            async:false,
-            asyncResult:true,
-            preEmit:function (rowData) {
+            }
+        })
+    }, {
+        loadCountry: Object.assign(new AsyncAction(), {
+            preEmit: function (rowData) {
                 LoadDataUsecase.loadCountriesData(rowData).then(this.completed).catch(this.failed);
-            },
-        }
+            }
+        })
     }]);
 
     constructor() {
         super();
         this.state = {
-            provinceData:[],
-            cityData:[],
-            countryData:[],
+            provinceData: [],
+            cityData: [],
+            countryData: [],
         };
     }
 
     onLoadProvinceCompleted(data) {
         this.setState({
-            provinceData:data,
+            provinceData: data,
         });
     }
 
@@ -74,7 +57,7 @@ class LoadDataStore extends BaseStore {
     onLoadCityCompleted(data) {
         this.setState({
             ...this.state,
-            cityData:data,
+            cityData: data,
         });
     }
 
@@ -85,7 +68,7 @@ class LoadDataStore extends BaseStore {
     onLoadCountryCompleted(data) {
         this.setState({
             ...this.state,
-            countryData:data,
+            countryData: data,
         });
     }
 

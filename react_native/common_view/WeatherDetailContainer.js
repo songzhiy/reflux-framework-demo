@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import WeatherDetailView from "./WeatherDetailView";
 import CommonNavigator from "../android_view/CommonNavigator";
+import WheatherDetailStore from "../store/WheatherDetailStore";
 
 export default class WeatherDetailContainer extends Component {
 
@@ -18,6 +19,7 @@ export default class WeatherDetailContainer extends Component {
             drawerOpening: false,
         };
         this._onPressBackPress = this._onPressBackPress.bind(this);
+        this._openDrawer = this._openDrawer.bind(this);
     }
 
     _onPressBackPress() {
@@ -29,10 +31,12 @@ export default class WeatherDetailContainer extends Component {
     }
 
     componentWillMount() {
+        WheatherDetailStore.registUpdateViewCallBack(this._openDrawer);
         BackAndroid.addEventListener("hardwareBackPress", this._onPressBackPress);
     }
 
     componentWillUnmount() {
+        WheatherDetailStore.unregistUpdateViewCallBack(this._openDrawer);
         BackAndroid.removeEventListener("hardwareBackPress", this._onPressBackPress);
     }
 
@@ -48,8 +52,10 @@ export default class WeatherDetailContainer extends Component {
         });
     }
 
-    componentDidMount() {
-        this.refs.weatherDetailView.setOutterDrawerView(this.refs.drawer);
+    _openDrawer(data) {
+        if (data.drawerOpening) {
+            this.refs.drawer.openDrawer();
+        }
     }
 
     render() {

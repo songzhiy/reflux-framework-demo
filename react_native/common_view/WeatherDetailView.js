@@ -15,15 +15,14 @@ import ServerApi from "../model/api/ServerApi";
 import AsyncStoreUtils from "../utils/AsyncStoreUtils";
 import Constants from "../utils/Constants";
 import ForecastBean from "../model/bean/ForecastBean";
+import WheatherDetailStore from "../store/WheatherDetailStore";
 
 export default class WeatherDetailView extends Component {
-
-    drawer = null;
 
     constructor(props) {
         super(props);
         this.state = {
-            backgroudImagePath: 'http://img05.tooopen.com/images/20150531/tooopen_sy_127457023651.jpg',
+            backgroudImagePath: 'aaa',
             currentCountryName: ' ',
             updateTime: ' ',
             nowTemperature: ' ',
@@ -36,72 +35,61 @@ export default class WeatherDetailView extends Component {
             sportTxt: ' ',
             isRefreshing: false,
         };
-        this._getBackgroundImagePath = this._getBackgroundImagePath.bind(this);
-        this._getWetherDetailData = this._getWetherDetailData.bind(this);
-        this._getCunrrentCountry = this._getCunrrentCountry.bind(this);
+        this._updateView = this._updateView.bind(this);
         this._getRefreshControl = this._getRefreshControl.bind(this);
         this._onDrawerOpenPress = this._onDrawerOpenPress.bind(this);
+        this._unregistRefluxCallback = this._unregistRefluxCallback.bind(this);
+        this._registRefluxCallback = this._registRefluxCallback.bind(this);
     }
 
-    async _getBackgroundImagePath() {
-        let path = await ServerFetchUtils.fetchData(ServerApi.backgroundImage);
+    _updateView(data) {
+        console.log(data);
         this.setState({
-            backgroudImagePath: path,
-        });
-    }
-
-    async _getWetherDetailData() {
-        this.setState({
-            isRefreshing: true,
-        });
-        let weatherId = await AsyncStoreUtils.getItem(Constants.CURRENT_WEATHER_ID);
-        let data = await ServerFetchUtils.fetchJsonData(ServerApi.getWeatherDetailData(weatherId));
-        let heWeather = data.HeWeather;
-        let detailData = heWeather[0];
-        let basic = detailData.basic;
-        let forecast = detailData.daily_forecast;
-        let suggestion = detailData.suggestion;
-        let now = detailData.now;
-        let aqi = detailData.aqi;
-        this.setState({
-            updateTime: basic.update.loc.substring(11),
-            nowTemperature: now.tmp + '℃',
-            nowCondText: now.cond.txt,
-            forecast: forecast,
-            aqiCount: aqi === undefined ? '暂无数据' : aqi.city.aqi,
-            pm25Count: aqi === undefined ? '暂无数据' : aqi.city.pm25,
-            comfTxt: suggestion.comf.txt,
-            carWashTxt: suggestion.cw.txt,
-            sportTxt: suggestion.sport.txt,
+            backgroudImagePath: data.backgroundImagePath,
+            currentCountryName: data.currentCountyName,
+            updateTime: data.updateTime,
+            nowTemperature: data.nowTemperature,
+            nowCondText: data.nowCondText,
+            forecast: data.forecast,
+            aqiCount: data.aqiCount,
+            pm25Count: data.pm25Count,
+            comfTxt: data.comfTxt,
+            carWashTxt: data.carWashTxt,
+            sportTxt: data.sportTxt,
             isRefreshing: false,
         });
     }
 
-    async _getCunrrentCountry() {
-        let currentCountyName = await AsyncStoreUtils.getItem(Constants.CURRENT_COUNTRY_NAME);
-        this.setState({
-            currentCountryName: currentCountyName,
-        });
+    componentWillUnmount() {
+        this._unregistRefluxCallback();
     }
 
     componentWillMount() {
-        this._getBackgroundImagePath();
-        this._getWetherDetailData().done();
-        this._getCunrrentCountry();
+        this._registRefluxCallback();
+        WheatherDetailStore.actions.loadBackgroundImage();
+        WheatherDetailStore.actions.loadCurrentCountry();
+        this.setState({
+            isRefreshing: true,
+        });
+        WheatherDetailStore.actions.loadWheatherDetailData();
     }
 
     _getRefreshControl() {
         return (
-            <RefreshControl refreshing={this.state.isRefreshing} onRefresh={this._getWetherDetailData}/>
+            <RefreshControl refreshing={this.state.isRefreshing} onRefresh={()=>WheatherDetailStore.actions.loadWheatherDetailData()}/>
         );
     }
 
     _onDrawerOpenPress() {
-        this.drawer.openDrawer();
+        WheatherDetailStore.actions.openDrawer();
     }
 
-    setOutterDrawerView(drawer) {
-        this.drawer = drawer;
+    _unregistRefluxCallback() {
+        WheatherDetailStore.unregistUpdateViewCallBack(this._updateView);
+    }
+
+    _registRefluxCallback() {
+        WheatherDetailStore.registUpdateViewCallBack(this._updateView);
     }
 
     render() {
@@ -173,7 +161,3 @@ export default class WeatherDetailView extends Component {
         )
     }
 }
-
-WeatherDetailView.propTypes = {
-    drawer: PropTypes.object,
-};

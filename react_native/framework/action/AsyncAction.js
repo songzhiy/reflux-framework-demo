@@ -5,6 +5,10 @@
 export default class AsyncAction {
     sync = false;
     asyncResult = true;
-    preEmit = null;
-    shouldEmit = null;
+    preEmit = function (data) {
+        return data;
+    };
+    shouldEmit = function (data) {
+        return true;
+    };
 }
