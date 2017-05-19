@@ -5,11 +5,8 @@
 import BaseStore from "../framework/store/BaseStore";
 import SyncAction from "../framework/action/SyncAction";
 import AsyncAction from "../framework/action/AsyncAction";
-import ServerFetchUtils from "../model/api/ServerFetchUtils";
-import ServerApi from "../model/api/ServerApi";
-import AsyncStoreUtils from "../utils/AsyncStoreUtils";
-import Constants from "../utils/Constants";
 import ForecastBean from "../model/bean/ForecastBean";
+import LoadDetailDataUsecase from "../usecase/LoadDetailDataUsecase";
 
 class WheatherDetailStore extends BaseStore {
     actions = this.createActions([
@@ -19,34 +16,39 @@ class WheatherDetailStore extends BaseStore {
         {
             loadBackgroundImage: Object.assign(new AsyncAction(), {
                 preEmit: function () {
-                    ServerFetchUtils.fetchData(ServerApi.backgroundImage).then(this.completed).catch(this.failed);
+                    LoadDetailDataUsecase.loadBackgroundImage().then(this.completed).catch(this.failed);
                 }
             })
         },
         {
             loadCurrentCountry:Object.assign(new AsyncAction(),{
                 preEmit:function () {
-                    AsyncStoreUtils.getItem(Constants.CURRENT_COUNTRY_NAME).then(this.completed).catch(this.failed);
+                    LoadDetailDataUsecase.loadCurrentCounryName().then(this.completed).catch(this.failed);
                 }
             })
         },
         {
             loadWheatherDetailData:Object.assign(new AsyncAction(),{
                 preEmit:function () {
-                    AsyncStoreUtils.getItem(Constants.CURRENT_WEATHER_ID).then((whetherId) => {
-                        ServerFetchUtils.fetchJsonData(ServerApi.getWeatherDetailData(whetherId)).then(this.completed).catch(this.failed);
-                    }).catch((erroro) => console.log(error.message));
+                    LoadDetailDataUsecase.loadDetailData().then(this.completed).catch(this.failed);
                 }
             })
-        }
+        },
+        {
+            loadAllDetailData:Object.assign(new AsyncAction(),{
+                preEmit:function () {
+                    LoadDetailDataUsecase.loadAllDetailData().then(this.completed).catch(this.failed);
+                }
+            })
+        },
     ]);
 
     constructor() {
         super();
         this.state = {
             drawerOpening: false,
-            backgroundImagePath:'',
-            currentCountyName:'',
+            backgroudImagePath: ' ',
+            currentCountryName: ' ',
             updateTime: ' ',
             nowTemperature: ' ',
             nowCondText: ' ',
@@ -71,7 +73,7 @@ class WheatherDetailStore extends BaseStore {
         this.setState({
             ...this.state,
             drawerOpening: false,
-            backgroundImagePath:path,
+            backgroudImagePath:path,
         });
     }
 
@@ -79,7 +81,7 @@ class WheatherDetailStore extends BaseStore {
         this.setState({
             ...this.state,
             drawerOpening: false,
-            currentCountyName:data,
+            currentCountryName:data,
         });
     }
 
@@ -94,6 +96,33 @@ class WheatherDetailStore extends BaseStore {
         this.setState({
             ...this.state,
             drawerOpening: false,
+            updateTime: basic.update.loc.substring(11),
+            nowTemperature: now.tmp + '℃',
+            nowCondText: now.cond.txt,
+            forecast: forecast,
+            aqiCount: aqi === undefined ? '暂无数据' : aqi.city.aqi,
+            pm25Count: aqi === undefined ? '暂无数据' : aqi.city.pm25,
+            comfTxt: suggestion.comf.txt,
+            carWashTxt: suggestion.cw.txt,
+            sportTxt: suggestion.sport.txt,
+            isRefreshing: false,
+        });
+    }
+
+    onLoadAllDetailDataCompleted(alldetailData) {
+        let data = alldetailData.detailData;
+        let heWeather = data.HeWeather;
+        let detailData = heWeather[0];
+        let basic = detailData.basic;
+        let forecast = detailData.daily_forecast;
+        let suggestion = detailData.suggestion;
+        let now = detailData.now;
+        let aqi = detailData.aqi;
+        this.setState({
+            ...this.state,
+            drawerOpening: false,
+            backgroudImagePath:alldetailData.backgroundImageUrl,
+            currentCountryName:alldetailData.crrentCountryName,
             updateTime: basic.update.loc.substring(11),
             nowTemperature: now.tmp + '℃',
             nowCondText: now.cond.txt,

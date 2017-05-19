@@ -2,18 +2,12 @@
  * Created by songzhiyang on 2017/4/26.
  */
 
-import React, {Component, PropTypes} from 'react';
-import {
-    View, Text, ScrollView, Image, RefreshControl, TouchableOpacity,
-} from 'react-native';
+import React, {Component} from "react";
+import {Image, RefreshControl, ScrollView, Text, TouchableOpacity, View} from "react-native";
 import {styles as StyleContainer} from "../styles/StyleContainer";
 import ForecastItemText from "./ForecastItemText";
 import AirQualityItemText from "./AirQualityItemText";
 import LifeSuggestionItemText from "./LifeSuggestionItemText";
-import ServerFetchUtils from "../model/api/ServerFetchUtils";
-import ServerApi from "../model/api/ServerApi";
-import AsyncStoreUtils from "../utils/AsyncStoreUtils";
-import Constants from "../utils/Constants";
 import ForecastBean from "../model/bean/ForecastBean";
 import WheatherDetailStore from "../store/WheatherDetailStore";
 
@@ -22,7 +16,7 @@ export default class WeatherDetailView extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            backgroudImagePath: 'aaa',
+            backgroudImagePath: ' ',
             currentCountryName: ' ',
             updateTime: ' ',
             nowTemperature: ' ',
@@ -43,21 +37,7 @@ export default class WeatherDetailView extends Component {
     }
 
     _updateView(data) {
-        console.log(data);
-        this.setState({
-            backgroudImagePath: data.backgroundImagePath,
-            currentCountryName: data.currentCountyName,
-            updateTime: data.updateTime,
-            nowTemperature: data.nowTemperature,
-            nowCondText: data.nowCondText,
-            forecast: data.forecast,
-            aqiCount: data.aqiCount,
-            pm25Count: data.pm25Count,
-            comfTxt: data.comfTxt,
-            carWashTxt: data.carWashTxt,
-            sportTxt: data.sportTxt,
-            isRefreshing: false,
-        });
+        this.setState(data);
     }
 
     componentWillUnmount() {
@@ -66,12 +46,10 @@ export default class WeatherDetailView extends Component {
 
     componentWillMount() {
         this._registRefluxCallback();
-        WheatherDetailStore.actions.loadBackgroundImage();
-        WheatherDetailStore.actions.loadCurrentCountry();
         this.setState({
             isRefreshing: true,
         });
-        WheatherDetailStore.actions.loadWheatherDetailData();
+        WheatherDetailStore.actions.loadAllDetailData();
     }
 
     _getRefreshControl() {
