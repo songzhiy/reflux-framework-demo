@@ -8,44 +8,33 @@ import {styles as StyleContainer} from "../styles/StyleContainer";
 import ForecastItemText from "./ForecastItemText";
 import AirQualityItemText from "./AirQualityItemText";
 import LifeSuggestionItemText from "./LifeSuggestionItemText";
-import ForecastBean from "../model/bean/ForecastBean";
 import WheatherDetailStore from "../store/WheatherDetailStore";
+import BaseView from "../framework/view/BaseView";
 
-export default class WeatherDetailView extends Component {
+export default class WeatherDetailView extends BaseView {
 
     constructor(props) {
         super(props);
         this.state = {
-            backgroudImagePath: ' ',
-            currentCountryName: ' ',
-            updateTime: ' ',
-            nowTemperature: ' ',
-            nowCondText: ' ',
-            forecast: [new ForecastBean(), new ForecastBean(), new ForecastBean(), new ForecastBean(), new ForecastBean(), new ForecastBean(), new ForecastBean()],
-            aqiCount: ' ',
-            pm25Count: ' ',
-            comfTxt: ' ',
-            carWashTxt: ' ',
-            sportTxt: ' ',
-            isRefreshing: false,
+            test:'test',//自己比store中多出的state
+            ...WheatherDetailStore.state,
         };
         this._updateView = this._updateView.bind(this);
         this._getRefreshControl = this._getRefreshControl.bind(this);
         this._onDrawerOpenPress = this._onDrawerOpenPress.bind(this);
-        this._unregistRefluxCallback = this._unregistRefluxCallback.bind(this);
-        this._registRefluxCallback = this._registRefluxCallback.bind(this);
     }
 
     _updateView(data) {
         this.setState(data);
+        console.log(this.state);
     }
 
     componentWillUnmount() {
-        this._unregistRefluxCallback();
+        WheatherDetailStore.unregistUpdateViewCallBack(this._updateView)
     }
 
     componentWillMount() {
-        this._registRefluxCallback();
+        WheatherDetailStore.registUpdateViewCallBack(this._updateView);
         this.setState({
             isRefreshing: true,
         });
@@ -60,14 +49,6 @@ export default class WeatherDetailView extends Component {
 
     _onDrawerOpenPress() {
         WheatherDetailStore.actions.openDrawer();
-    }
-
-    _unregistRefluxCallback() {
-        WheatherDetailStore.unregistUpdateViewCallBack(this._updateView);
-    }
-
-    _registRefluxCallback() {
-        WheatherDetailStore.registUpdateViewCallBack(this._updateView);
     }
 
     render() {

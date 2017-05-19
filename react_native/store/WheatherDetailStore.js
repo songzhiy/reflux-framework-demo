@@ -14,27 +14,6 @@ class WheatherDetailStore extends BaseStore {
             openDrawer: new SyncAction(),
         },
         {
-            loadBackgroundImage: Object.assign(new AsyncAction(), {
-                preEmit: function () {
-                    LoadDetailDataUsecase.loadBackgroundImage().then(this.completed).catch(this.failed);
-                }
-            })
-        },
-        {
-            loadCurrentCountry:Object.assign(new AsyncAction(),{
-                preEmit:function () {
-                    LoadDetailDataUsecase.loadCurrentCounryName().then(this.completed).catch(this.failed);
-                }
-            })
-        },
-        {
-            loadWheatherDetailData:Object.assign(new AsyncAction(),{
-                preEmit:function () {
-                    LoadDetailDataUsecase.loadDetailData().then(this.completed).catch(this.failed);
-                }
-            })
-        },
-        {
             loadAllDetailData:Object.assign(new AsyncAction(),{
                 preEmit:function () {
                     LoadDetailDataUsecase.loadAllDetailData().then(this.completed).catch(this.failed);
@@ -66,46 +45,6 @@ class WheatherDetailStore extends BaseStore {
         this.setState({
             ...this.state,
             drawerOpening: true,
-        });
-    }
-
-    onLoadBackgroundImageCompleted(path) {
-        this.setState({
-            ...this.state,
-            drawerOpening: false,
-            backgroudImagePath:path,
-        });
-    }
-
-    onLoadCurrentCountryCompleted(data) {
-        this.setState({
-            ...this.state,
-            drawerOpening: false,
-            currentCountryName:data,
-        });
-    }
-
-    onLoadWheatherDetailDataCompleted(data) {
-        let heWeather = data.HeWeather;
-        let detailData = heWeather[0];
-        let basic = detailData.basic;
-        let forecast = detailData.daily_forecast;
-        let suggestion = detailData.suggestion;
-        let now = detailData.now;
-        let aqi = detailData.aqi;
-        this.setState({
-            ...this.state,
-            drawerOpening: false,
-            updateTime: basic.update.loc.substring(11),
-            nowTemperature: now.tmp + '℃',
-            nowCondText: now.cond.txt,
-            forecast: forecast,
-            aqiCount: aqi === undefined ? '暂无数据' : aqi.city.aqi,
-            pm25Count: aqi === undefined ? '暂无数据' : aqi.city.pm25,
-            comfTxt: suggestion.comf.txt,
-            carWashTxt: suggestion.cw.txt,
-            sportTxt: suggestion.sport.txt,
-            isRefreshing: false,
         });
     }
 
