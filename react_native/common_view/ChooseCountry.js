@@ -9,11 +9,13 @@ import Constants from "../utils/Constants";
 import StartNewPage from "../rn_native/StartNewPage.android";
 import ChooseListView from "./ChooseListView";
 import LoadDataStore from "../store/LoadDataStore";
+import BaseView from "../framework/view/BaseView";
 
-export default class ChooseCountry extends Component {
+export default class ChooseCountry extends BaseView {
 
     constructor(props) {
         super(props);
+        this.setStore(LoadDataStore);
         this.jump2WeatherDetailActivity = this.jump2WeatherDetailActivity.bind(this);
         this.fetchData = this.fetchData.bind(this);
         this._onDataChange = this._onDataChange.bind(this);
@@ -28,11 +30,13 @@ export default class ChooseCountry extends Component {
     }
 
     componentWillMount() {
-        LoadDataStore.registUpdateViewCallBack(this._onDataChange);
+        super.componentWillMount();
+        this.registCallback('loadCountry',this._onDataChange);
     }
 
     componentWillUnmount() {
-        LoadDataStore.unregistUpdateViewCallBack(this._onDataChange);
+        super.componentWillUnmount();
+        this.unregistCallback('loadCountry');
     }
 
     fetchData() {
@@ -40,6 +44,7 @@ export default class ChooseCountry extends Component {
     }
 
     _onDataChange(data) {
+        console.log('chooseCountry');
         this.refs.listView.updateData(data.countryData);
     }
 

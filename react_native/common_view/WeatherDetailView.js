@@ -15,6 +15,7 @@ export default class WeatherDetailView extends BaseView {
 
     constructor(props) {
         super(props);
+        this.setStore(WheatherDetailStore);
         this.state = {
             test:'test',//自己比store中多出的state
             ...WheatherDetailStore.state,
@@ -26,15 +27,16 @@ export default class WeatherDetailView extends BaseView {
 
     _updateView(data) {
         this.setState(data);
-        console.log(this.state);
     }
 
     componentWillUnmount() {
-        WheatherDetailStore.unregistUpdateViewCallBack(this._updateView)
+        super.componentWillUnmount();
+        this.unregistCallback('loadAllDetailData');
     }
 
     componentWillMount() {
-        WheatherDetailStore.registUpdateViewCallBack(this._updateView);
+        super.componentWillMount();
+        this.registCallback('loadAllDetailData',this._updateView);
         this.setState({
             isRefreshing: true,
         });
@@ -43,7 +45,7 @@ export default class WeatherDetailView extends BaseView {
 
     _getRefreshControl() {
         return (
-            <RefreshControl refreshing={this.state.isRefreshing} onRefresh={()=>WheatherDetailStore.actions.loadWheatherDetailData()}/>
+            <RefreshControl refreshing={this.state.isRefreshing} onRefresh={()=>WheatherDetailStore.actions.loadAllDetailData()}/>
         );
     }
 

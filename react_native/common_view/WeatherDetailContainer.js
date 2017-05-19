@@ -9,12 +9,14 @@ import {
 } from 'react-native';
 import WeatherDetailView from "./WeatherDetailView";
 import CommonNavigator from "../android_view/CommonNavigator";
+import BaseView from "../framework/view/BaseView";
 import WheatherDetailStore from "../store/WheatherDetailStore";
 
-export default class WeatherDetailContainer extends Component {
+export default class WeatherDetailContainer extends BaseView {
 
     constructor(props) {
         super(props);
+        this.setStore(WheatherDetailStore);
         this.state = {
             drawerOpening: false,
         };
@@ -31,12 +33,14 @@ export default class WeatherDetailContainer extends Component {
     }
 
     componentWillMount() {
-        WheatherDetailStore.registUpdateViewCallBack(this._openDrawer);
+        super.componentWillMount();
+        this.registCallback('openDrawer',this._openDrawer);
         BackAndroid.addEventListener("hardwareBackPress", this._onPressBackPress);
     }
 
     componentWillUnmount() {
-        WheatherDetailStore.unregistUpdateViewCallBack(this._openDrawer);
+        super.componentWillUnmount();
+        this.unregistCallback('openDrawer');
         BackAndroid.removeEventListener("hardwareBackPress", this._onPressBackPress);
     }
 

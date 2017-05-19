@@ -11,6 +11,7 @@ export default class BaseStore extends Reflux.Store {
 
     constructor() {
         super();
+        this.state = {currentActionName:' '};
     }
 
     /**

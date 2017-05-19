@@ -46,6 +46,7 @@ class LoadDataStore extends BaseStore {
 
     onLoadProvinceCompleted(data) {
         this.setState({
+            currentActionName:'loadProvince',
             provinceData: data,
         });
     }
@@ -57,6 +58,7 @@ class LoadDataStore extends BaseStore {
     onLoadCityCompleted(data) {
         this.setState({
             ...this.state,
+            currentActionName:'loadCity',
             cityData: data,
         });
     }
@@ -68,6 +70,7 @@ class LoadDataStore extends BaseStore {
     onLoadCountryCompleted(data) {
         this.setState({
             ...this.state,
+            currentActionName:'loadCountry',
             countryData: data,
         });
     }

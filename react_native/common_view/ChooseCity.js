@@ -6,11 +6,13 @@ import React, {Component} from "react";
 import ChooseCountry from "./ChooseCountry";
 import ChooseListView from "./ChooseListView";
 import LoadDataStore from "../store/LoadDataStore";
+import BaseView from "../framework/view/BaseView";
 
-export default class ChooseCity extends Component {
+export default class ChooseCity extends BaseView {
 
     constructor(props) {
         super(props);
+        this.setStore(LoadDataStore);
         this.jump2Country = this.jump2Country.bind(this);
         this.fetchData = this.fetchData.bind(this);
         this._onDataChange = this._onDataChange.bind(this);
@@ -26,14 +28,17 @@ export default class ChooseCity extends Component {
     }
 
     componentWillUnmount() {
-        LoadDataStore.unregistUpdateViewCallBack(this._onDataChange);
+        super.componentWillUnmount();
+        this.unregistCallback('loadCity');
     }
 
     componentWillMount() {
-        LoadDataStore.registUpdateViewCallBack(this._onDataChange);
+        super.componentWillMount();
+        this.registCallback('loadCity',this._onDataChange);
     }
 
     _onDataChange(data) {
+        console.log('chooseCity');
         this.refs.listView.updateData(data.cityData);
     }
 

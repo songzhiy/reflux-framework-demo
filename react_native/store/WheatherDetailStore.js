@@ -44,6 +44,7 @@ class WheatherDetailStore extends BaseStore {
     onOpenDrawer() {
         this.setState({
             ...this.state,
+            currentActionName:'openDrawer',
             drawerOpening: true,
         });
     }
@@ -59,6 +60,7 @@ class WheatherDetailStore extends BaseStore {
         let aqi = detailData.aqi;
         this.setState({
             ...this.state,
+            currentActionName:'loadAllDetailData',
             drawerOpening: false,
             backgroudImagePath:alldetailData.backgroundImageUrl,
             currentCountryName:alldetailData.crrentCountryName,
