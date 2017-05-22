@@ -13,17 +13,17 @@ import {
     Image,
     TextInput,
     ScrollView,
-    ToastAndroid,
 } from 'react-native';
 
 import codePush from 'react-native-code-push'
 import CommonNavigator from "./react_native/android_view/CommonNavigator.android";
 import WeatherDetailContainer from "./react_native/common_view/WeatherDetailContainer";
+import UIUtils from "./react_native/framework/utils/UIUtils";
 
 export default class HelloWorld extends Component {
 
     componentDidMount() {
-        ToastAndroid.show('准备下载',ToastAndroid.SHORT);
+        UIUtils.showToast('准备下载');
         codePush.sync();
     }
 

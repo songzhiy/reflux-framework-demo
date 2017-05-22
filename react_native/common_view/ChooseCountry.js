@@ -3,13 +3,13 @@
  */
 
 import React, {Component} from "react";
-import {ToastAndroid} from "react-native";
 import AsyncStoreUtils from "../framework/utils/AsyncStoreUtils";
 import Constants from "../utils/Constants";
 import StartNewPage from "../rn_native/StartNewPage.android";
 import ChooseListView from "./ChooseListView";
 import LoadDataStore from "../store/LoadDataStore";
 import BaseView from "../framework/view/BaseView";
+import UIUtils from "../framework/utils/UIUtils";
 
 export default class ChooseCountry extends BaseView {
 
@@ -22,7 +22,7 @@ export default class ChooseCountry extends BaseView {
     }
 
     jump2WeatherDetailActivity(rowData) {
-        ToastAndroid.show(rowData.name + ' -- ' + rowData.id + ' -- ' + rowData.weather_id,ToastAndroid.SHORT);
+        UIUtils.showToast(rowData.name + ' -- ' + rowData.id + ' -- ' + rowData.weather_id);
         AsyncStoreUtils.setItem(Constants.CURRENT_COUNTRY_ID,rowData.id.toString()).done();
         AsyncStoreUtils.setItem(Constants.CURRENT_WEATHER_ID,rowData.weather_id.toString()).done();
         AsyncStoreUtils.setItem(Constants.CURRENT_COUNTRY_NAME,rowData.name).done();

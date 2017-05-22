@@ -10,6 +10,7 @@ import AirQualityItemText from "./AirQualityItemText";
 import LifeSuggestionItemText from "./LifeSuggestionItemText";
 import WheatherDetailStore from "../store/WheatherDetailStore";
 import BaseView from "../framework/view/BaseView";
+import UIUtils from "../framework/utils/UIUtils";
 
 export default class WeatherDetailView extends BaseView {
 
