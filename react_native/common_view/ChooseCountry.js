@@ -4,7 +4,7 @@
 
 import React, {Component} from "react";
 import {ToastAndroid} from "react-native";
-import AsyncStoreUtils from "../utils/AsyncStoreUtils";
+import AsyncStoreUtils from "../framework/utils/AsyncStoreUtils";
 import Constants from "../utils/Constants";
 import StartNewPage from "../rn_native/StartNewPage.android";
 import ChooseListView from "./ChooseListView";

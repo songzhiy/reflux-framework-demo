@@ -4,7 +4,7 @@
 
 import ServerFetchUtils from "../model/api/ServerFetchUtils";
 import ServerApi from "../model/api/ServerApi";
-import AsyncStoreUtils from "../utils/AsyncStoreUtils";
+import AsyncStoreUtils from "../framework/utils/AsyncStoreUtils";
 import Constants from "../utils/Constants";
 
 export default class LoadDetailDataUsecase {
