@@ -11,6 +11,7 @@ import LifeSuggestionItemText from "./LifeSuggestionItemText";
 import WheatherDetailStore from "../store/WheatherDetailStore";
 import BaseView from "../framework/view/BaseView";
 import UIUtils from "../framework/utils/UIUtils";
+import AlertUtils from "../framework/utils/AlertUtils";
 
 export default class WeatherDetailView extends BaseView {
 
@@ -18,7 +19,7 @@ export default class WeatherDetailView extends BaseView {
         super(props);
         this.setStore(WheatherDetailStore);
         this.state = {
-            test:'test',//自己比store中多出的state
+            test: 'test',//自己比store中多出的state
             ...WheatherDetailStore.state,
         };
         this._updateView = this._updateView.bind(this);
@@ -37,7 +38,7 @@ export default class WeatherDetailView extends BaseView {
 
     componentWillMount() {
         super.componentWillMount();
-        this.registCallback('loadAllDetailData',this._updateView);
+        this.registCallback('loadAllDetailData', this._updateView);
         this.setState({
             isRefreshing: true,
         });
@@ -46,7 +47,8 @@ export default class WeatherDetailView extends BaseView {
 
     _getRefreshControl() {
         return (
-            <RefreshControl refreshing={this.state.isRefreshing} onRefresh={()=>WheatherDetailStore.actions.loadAllDetailData()}/>
+            <RefreshControl refreshing={this.state.isRefreshing}
+                            onRefresh={() => WheatherDetailStore.actions.loadAllDetailData()}/>
         );
     }
 
