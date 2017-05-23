@@ -10,8 +10,7 @@ import AirQualityItemText from "./AirQualityItemText";
 import LifeSuggestionItemText from "./LifeSuggestionItemText";
 import WheatherDetailStore from "../store/WheatherDetailStore";
 import BaseView from "../framework/view/BaseView";
-import UIUtils from "../framework/utils/UIUtils";
-import AlertUtils from "../framework/utils/AlertUtils";
+import AppUtils from "../framework/utils/AppUtils";
 
 export default class WeatherDetailView extends BaseView {
 

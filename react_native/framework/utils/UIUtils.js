@@ -7,6 +7,10 @@ import {
 } from 'react-native';
 import PixelratioUtils from "./PixelratioUtils";
 import DimensionsUtils from "./DimensionsUtils";
+
+/**
+ * 日常UI相关的工具类
+ */
 export default class UIUtils {
 
     /**

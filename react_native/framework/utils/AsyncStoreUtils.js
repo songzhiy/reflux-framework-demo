@@ -6,6 +6,9 @@ import {
     AsyncStorage,
 } from 'react-native';
 
+/**
+ * 类似于sp的存储方式
+ */
 export default class AsyncStoreUtils {
     /**
      * 存储数据  类似于sp的set方法

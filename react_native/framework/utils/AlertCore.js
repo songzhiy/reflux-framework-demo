@@ -4,7 +4,7 @@
 
 import {Alert} from 'react-native';
 
-export default class AlertUtils {
+export default class AlertCore {
 
     /**
      * 弹出一个alert 类似于dialog
