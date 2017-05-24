@@ -3,7 +3,7 @@
  */
 
 import React, {Component} from "react";
-import {Image, RefreshControl, ScrollView, Text, TouchableOpacity, View} from "react-native";
+import {Image, RefreshControl, ScrollView, Text, TouchableOpacity, View,NativeModules} from "react-native";
 import {styles as StyleContainer} from "../styles/StyleContainer";
 import ForecastItemText from "./ForecastItemText";
 import AirQualityItemText from "./AirQualityItemText";

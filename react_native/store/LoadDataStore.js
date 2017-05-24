@@ -11,7 +11,7 @@ class LoadDataStore extends BaseStore {
     loadDataAction = this.createActions([{
         loadProvince: Object.assign(new AsyncAction(), {
             preEmit: function (rowData) {
-                LoadDataUsecase.loadProvinceData(rowData).then(this.completed).catch(this.failed);
+                LoadDataUsecase.loadProvinceDataByCallback().then(this.completed).catch(this.failed);
             },
             //目前这个没有用
             shouldEmit: function (data) {
@@ -52,7 +52,7 @@ class LoadDataStore extends BaseStore {
     }
 
     onLoadProvinceFailed(error) {
-        console.log('onLoadProvinceFailed -- ' + error.message);
+        console.log('onLoadProvinceFailed -- ' + error);
     }
 
     onLoadCityCompleted(data) {
@@ -64,7 +64,7 @@ class LoadDataStore extends BaseStore {
     }
 
     onLoadCityFailed(error) {
-        console.log('onLoadCityFailed -- ' + error.message);
+        console.log('onLoadCityFailed -- ' + error);
     }
 
     onLoadCountryCompleted(data) {
@@ -76,7 +76,7 @@ class LoadDataStore extends BaseStore {
     }
 
     onLoadCountryFailed(error) {
-        console.log('onLoadCountryFailed -- ' + error.message);
+        console.log('onLoadCountryFailed -- ' + error);
     }
 }
 

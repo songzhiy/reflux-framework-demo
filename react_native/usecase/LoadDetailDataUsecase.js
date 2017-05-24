@@ -2,7 +2,7 @@
  * Created by songzhiyang on 2017/5/19.
  */
 
-import ServerFetchUtils from "../model/api/ServerFetchUtils";
+import ServerFetchUtils from "../framework/net/fetchNet/ServerFetch";
 import ServerApi from "../model/api/ServerApi";
 import AsyncStoreUtils from "../framework/utils/AsyncStoreUtils";
 import Constants from "../utils/Constants";
@@ -21,7 +21,7 @@ export default class LoadDetailDataUsecase {
 
     static async loadDetailData() {
         let currentCountryId = await AsyncStoreUtils.getItem(Constants.CURRENT_WEATHER_ID);
-        let detailData = await ServerFetchUtils.fetchJsonData(ServerApi.getWeatherDetailData(currentCountryId))
+        let detailData = await ServerFetchUtils.fetchGetData(ServerApi.getWeatherDetailData(currentCountryId))
         return detailData;
     }
 
