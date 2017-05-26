@@ -16,10 +16,8 @@ export default class LoadDataUsecase {
     static loadProvinceDataByCallback() {
         return new Promise(function (resolve,reject) {
             ServerFetchUtils.fetchGetData(ServerApi.chinaProvinces,function (response) {
-                console.log(response);
                 resolve(response);
             },function (error) {
-                console.log(error);
                 reject(error);
             });
         });
