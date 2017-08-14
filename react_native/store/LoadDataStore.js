@@ -8,8 +8,8 @@ import AsyncAction from "../framework/action/AsyncAction";
 
 class LoadDataStore extends BaseStore {
 
-    loadDataAction = this.createActions([{
-        loadProvince: Object.assign(new AsyncAction(), {
+    loadDataAction = this.createActions([{//总actionName:loadDataAction
+        loadProvince: Object.assign(new AsyncAction(), {//子actionName:loadProvince
             preEmit: function (rowData) {
                 LoadDataUsecase.loadProvinceDataByCallback().then(this.completed).catch(this.failed);
             },
@@ -22,13 +22,13 @@ class LoadDataStore extends BaseStore {
             },
         })
     }, {
-        loadCity: Object.assign(new AsyncAction(), {
+        loadCity: Object.assign(new AsyncAction(), {//子actionName:loadCity
             preEmit: function (rowData) {
                 LoadDataUsecase.loadCitiesData(rowData).then(this.completed).catch(this.failed);
             }
         })
     }, {
-        loadCountry: Object.assign(new AsyncAction(), {
+        loadCountry: Object.assign(new AsyncAction(), {//子actionName:loadCountry
             preEmit: function (rowData) {
                 LoadDataUsecase.loadCountriesData(rowData).then(this.completed).catch(this.failed);
             }
